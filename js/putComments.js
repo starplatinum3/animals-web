@@ -281,6 +281,7 @@ function replaceCmt2CmtField(cmt2CmtObj) {
 
 // https://www.cnblogs.com/linkenpark/p/7838763.html
 
+// 好像是onclick的时候 给按钮添加 onclick 会无限的 回调？
 putComments();
 // let $delBtn = $(".del-btn");
 // $delBtn.click(function () {
