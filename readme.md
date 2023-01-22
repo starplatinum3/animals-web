@@ -9,3 +9,10 @@ animals.html 为入口
 git add .
 git commit -m "1" 
 git push origin master
+
+nginx -s quit
+cp nginx_animals_miku.conf /etc/nginx/nginx_animals_miku.conf
+nginx  -c /etc/nginx/nginx_animals_miku.conf
+
+nginx -t /etc/nginx/nginx_animals_miku.conf
+nginx 关闭
