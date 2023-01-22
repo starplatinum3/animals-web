@@ -79,6 +79,7 @@
 <!--cols-->
 <!--main-content-zoo-->
 <div class=" bg-whitesmoke col">
+    <div id="message"></div>
     <div class="cols">
         <!--    左边列表-->
 <!--        分享-->
@@ -209,7 +210,7 @@
     <!-- nginx 外面的 index 可以 但是里面的，目录里面的 index 不行 -->
     <!-- <a href="mikutap/index.html">mikutap</a> -->
    
-     <a href=" mikutap-web/index.html">mikutap</a>
+     <a href="mikutap-web/index.html">mikutap</a>
     <address>通讯地址：杜王町 &nbsp;&nbsp;电话：（010）87878787&nbsp;&nbsp;网管信箱：joske@diamond.jojo.bangumi.com</address>
 </div>
 
@@ -227,5 +228,16 @@
 <script src="js/share.js" type="text/javascript"></script>
 <script src="js/time.js" type="text/javascript"></script>
 <script src="js/rotationNoCircle.js" type="text/javascript"></script>
+<script>
+     window.addEventListener('message',function(event){
+        console.log("event");
+        console.log(event);
+        document.getElementById('message').innerHTML = "收到" 
+            + event.origin + "消息：" + event.data;
+    }, false);
+// ————————————————
+// 版权声明：本文为CSDN博主「tang_yi_」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+// 原文链接：https://blog.csdn.net/tang_yi_/article/details/79401280
+</script>
 </body>
 </html>
