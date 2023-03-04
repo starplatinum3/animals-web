@@ -3,6 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="320" name="MobileOptimized">
+
     <title>看看生物们</title>
     <link rel="stylesheet" type="text/css" href="css/lunbo.css">
     <link rel="stylesheet" type="text/css" href="css/rotation.css">
@@ -22,11 +29,35 @@
     <link rel="stylesheet" type="text/css" href="css/info.css">
     <link rel="stylesheet" type="text/css" href="css/font.css">
     <link type="text/css" href="css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .container {
+            width: 1100px;
+            max-width: 100%;
+        }
+
+        .container img {
+            max-width: 100%;
+        }
+
+        @media only screen and (max-width: 480px) {
+            /* //此适配不同手机型号下文字，图片的大小 */
+            .bodyDom{
+                width: 300px;
+                font-size: 30px;
+            }
+        }
+
+        @media only screen and (max-width: 375px) {
+
+            /* //此适配不同手机型号下文字，图片的大小 */
+
+        }
+    </style>
     <!--    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">-->
 
 </head>
 
-<body class="selection-blue">
+<body class="selection-blue bodyDom">
     <a id="top"></a>
 
     <a href="子网掩码.html">子网掩码</a>

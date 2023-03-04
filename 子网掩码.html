@@ -1,115 +1,176 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-        <!-- D:\proj\js\animals-web\mikutap-web\js\jquery.min.js -->
-		<!-- <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script> -->
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-	</head>
-    <!-- js实现ip地址和子网掩码功能计算，并判断指定ip地址是否在网段之间_js 子网掩码计算_笑到世界都狼狈的博客-CSDN博客
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="320" name="MobileOptimized">
+
+    <!-- D:\proj\js\animals-web\mikutap-web\js\jquery.min.js -->
+    <!-- <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script> -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <style>
+        .bodyDom {
+            /* width: 300px; */
+            /* font-size: 30px; */
+            /* font-size:5rem; */
+            /* font-size:1rem; */
+            /* font-size:2rem; */
+            /* font-size: 30px; */
+            /* font-size: 50px; */
+            /* overflow-x:hidden; */
+            /* overflow: auto; */
+        }
+
+        @media only screen and (max-width: 480px) {
+
+            /* //此适配不同手机型号下文字，图片的大小 */
+            .bodyDom {
+                /* width: 300px; */
+                font-size: 30px;
+            }
+        }
+
+        /* 小屏幕手机端 */
+        @media (min-width: 0px) and (max-width:768px) {
+
+            /* .div1{
+					width: 100px;
+					height: 100px;
+					background-color: red;
+				} */
+            .bodyDom {
+                /* width: 300px; */
+                /* font-size: 30px; */
+                font-size: 25px;
+                /* font-size: 50px; */
+            
+            }
+            input{
+                font-size: 30px;
+            }
+            button{
+                font-size: 30px;
+            }
+        }
+
+        /* ————————————————
+版权声明：本文为CSDN博主「大前端工程师」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/chengqige/article/details/117844872 */
+    </style>
+</head>
+<!-- js实现ip地址和子网掩码功能计算，并判断指定ip地址是否在网段之间_js 子网掩码计算_笑到世界都狼狈的博客-CSDN博客
 https://blog.csdn.net/qq_36509946/article/details/105950926 -->
-	<body>
-		<div>
 
-            <pre>
-            例1：192.168.1.100/29=255.255.255.248求网络地址、主机地址和广播地址
+<body>
+    <div class="bodyDom">
 
-解：C类网络24位，此借了5位，可以划分出2^5=32个子网，每个子网可以容纳2^3-2=6台主机
+        <!-- <pre> -->
+        例1：192.168.1.100/29=255.255.255.248求网络地址、主机地址和广播地址
+
+        解：C类网络24位，此借了5位，可以划分出2^5=32个子网，每个子网可以容纳2^3-2=6台主机
 
         块=2^3（主机位数）=256-248（掩码）=8
 
         8的倍数最接近100的为=96
 
-所以：网络地址：192.168.1.96/29
+        所以：网络地址：192.168.1.96/29
 
-           主机地址：192.168.1.97~192.168.1.102
+        主机地址：192.168.1.97~192.168.1.102
 
-           广播地址：192.168.1.103
-————————————————
-版权声明：本文为CSDN博主「一条闲宇」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/m0_53367084/article/details/124379057
+        广播地址：192.168.1.103
+        ————————————————
+        版权声明：本文为CSDN博主「一条闲宇」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+        原文链接：https://blog.csdn.net/m0_53367084/article/details/124379057
 
-判断是 c类还是 b 类网络 js
+        判断是 c类还是 b 类网络 js
 
-如何判断IP地址是A类B类还是C类_Mir_憨豆先生的博客-CSDN博客
-https://blog.csdn.net/loongwong2011/article/details/52728146
+        如何判断IP地址是A类B类还是C类_Mir_憨豆先生的博客-CSDN博客
+        https://blog.csdn.net/loongwong2011/article/details/52728146
 
-</pre>
-            ip 和 子网掩码 每个都 & , 1111 1111 & 1111 0000
-			<div>ip:<input id="ip" type="text" value="192.168.30.5"/></div>
-			<div>子网掩码:<input id="netMask" type="text" value="255.255.255.0" /></div>
-			<div>输入IP地址范围 (必须在ip和mac相与的网段之间):<input type="text" id="addValue"/></div>
-			<div><button id="btnClick">点击计算子网掩码&ip</button></div>
-            <div id="subNetResult">subNetResult</div>
-            <!-- B类 A类 -->
-            他是   B类 A类 网络吗？： <span id="classIP"> </span>
-		</div>
-	</body>
-	<script type="text/javascript">
-
-        function getIPType(resultIp){
-            let ipPart0=  resultIp[0]
-   ipPart0Int=parseInt(ipPart0)
-   if(ipPart0Int<=126){
-    // 1.0.0.1－126.255.255.254；
-    return "A"
-   }
-    if(ipPart0Int<=191){
-        return "B"
-    }
-    return "C"
-
+        <!-- </pre> -->
+        ip 和 子网掩码 每个都 & , 1111 1111 & 1111 0000
+        <div>ip:<input id="ip" type="text" value="192.168.30.5" /></div>
+        <div>子网掩码:<input id="netMask" type="text" value="255.255.255.0" /></div>
+        <div>输入IP地址范围 (必须在ip和mac相与的网段之间):<input type="text" id="addValue" /></div>
+        <div><button id="btnClick">点击计算子网掩码&ip</button></div>
+        <div id="subNetResult">subNetResult</div>
+        <!-- B类 A类 -->
+        他是 B类 A类 网络吗？： <span id="classIP"> </span>
+    </div>
+</body>
+<script type="text/javascript">
+    function getIPType(resultIp) {
+        let ipPart0 = resultIp[0]
+        ipPart0Int = parseInt(ipPart0)
+        if (ipPart0Int <= 126) {
+            // 1.0.0.1－126.255.255.254；
+            return "A"
         }
-		$("#btnClick").on("click",function(){
-			var resultIp = $("#ip").val().split(".");//IP地址
-	        var resultMask = $("#netMask").val().split(".");//子网掩码
-			var resultAddValue=$("#addValue").val().split(".");//输入IP地址范围
-//			console.log('resultIp',resultIp);
-//			console.log('resultMask',resultMask);
-//			console.log('resultAddValue',resultAddValue);
-	        
-// classIP
-let  classIPDom=
-document.getElementById("classIP")
+        if (ipPart0Int <= 191) {
+            return "B"
+        }
+        return "C"
 
-  let  ipType= getIPType(resultIp)
+    }
+    $("#btnClick").on("click", function () {
+        var resultIp = $("#ip").val().split("."); //IP地址
+        var resultMask = $("#netMask").val().split("."); //子网掩码
+        var resultAddValue = $("#addValue").val().split("."); //输入IP地址范围
+        //			console.log('resultIp',resultIp);
+        //			console.log('resultMask',resultMask);
+        //			console.log('resultAddValue',resultAddValue);
 
-  classIPDom.innerHTML=`${ipType} 类网络`
+        // classIP
+        let classIPDom =
+            document.getElementById("classIP")
 
-//    let ipPart0=  resultIp[0]
-//    ipPart0Int=parseInt(ipPart0)
-//    if(ipPart0Int<=126){
-//     // 1.0.0.1－126.255.255.254；
-//    }
-//    classIPDom.innerHTML = resultIp[0];
-	        //将输入IP范围转换成整数
-	        var resultAddValueNumber = Number(resultAddValue[0])*256*256*256 + Number(resultAddValue[1])*256*256 + Number(resultAddValue[2])*256 +Number(resultAddValue[3]);
-//	    	console.log('resultAddValueNumber',resultAddValueNumber);
-	        var subNet = [];//ip地址与子网掩码相与的网段结果
-	        for (var i = 0, num = resultIp.length; i < num; i++) {
-	            var c = parseInt(resultIp[i]) & parseInt(resultMask[i]);
-	            subNet.push(c);
-	        }
-	        subNet = subNet.join(".");
-	        // console.log(subNet);
-	        var subNetResult = subNet.split(".");
-            document.getElementById("subNetResult").innerHTML = subNetResult;
-//	        console.log('subNetResult',subNetResult);
-			//限制输入范围在相与结果网段，最低位为1-255,将其转换成整数
-	        var ipLeftNumber = Number(subNetResult[0])*256*256*256 + Number(subNetResult[1])*256*256 + Number(subNetResult[2])*256 +Number(1);
-	        var ipRightNumber = Number(subNetResult[0])*256*256*256 + Number(subNetResult[1])*256*256 + Number(subNetResult[2])*256 +Number(255);
-//	        console.log('ipLeftNumber',ipLeftNumber);
-//	        console.log('ipRightNumber',ipRightNumber);
-	        if($("#addValue").val() != ""){
-	        	//如果输入IP，判断在不在范围内
-	        	if (resultAddValueNumber < ipLeftNumber || resultAddValueNumber > ipRightNumber){
-		        	console.log('超出IP网段范围');
-		        }else{
-		        	console.log('成功');
-		        }
-	        } 
-		})
-         
-	</script>
+        let ipType = getIPType(resultIp)
+
+        classIPDom.innerHTML = `${ipType} 类网络`
+
+        //    let ipPart0=  resultIp[0]
+        //    ipPart0Int=parseInt(ipPart0)
+        //    if(ipPart0Int<=126){
+        //     // 1.0.0.1－126.255.255.254；
+        //    }
+        //    classIPDom.innerHTML = resultIp[0];
+        //将输入IP范围转换成整数
+        var resultAddValueNumber = Number(resultAddValue[0]) * 256 * 256 * 256 + Number(resultAddValue[1]) *
+            256 * 256 + Number(resultAddValue[2]) * 256 + Number(resultAddValue[3]);
+        //	    	console.log('resultAddValueNumber',resultAddValueNumber);
+        var subNet = []; //ip地址与子网掩码相与的网段结果
+        for (var i = 0, num = resultIp.length; i < num; i++) {
+            var c = parseInt(resultIp[i]) & parseInt(resultMask[i]);
+            subNet.push(c);
+        }
+        subNet = subNet.join(".");
+        // console.log(subNet);
+        var subNetResult = subNet.split(".");
+        document.getElementById("subNetResult").innerHTML = subNetResult;
+        //	        console.log('subNetResult',subNetResult);
+        //限制输入范围在相与结果网段，最低位为1-255,将其转换成整数
+        var ipLeftNumber = Number(subNetResult[0]) * 256 * 256 * 256 + Number(subNetResult[1]) * 256 * 256 +
+            Number(subNetResult[2]) * 256 + Number(1);
+        var ipRightNumber = Number(subNetResult[0]) * 256 * 256 * 256 + Number(subNetResult[1]) * 256 * 256 +
+            Number(subNetResult[2]) * 256 + Number(255);
+        //	        console.log('ipLeftNumber',ipLeftNumber);
+        //	        console.log('ipRightNumber',ipRightNumber);
+        if ($("#addValue").val() != "") {
+            //如果输入IP，判断在不在范围内
+            if (resultAddValueNumber < ipLeftNumber || resultAddValueNumber > ipRightNumber) {
+                console.log('超出IP网段范围');
+            } else {
+                console.log('成功');
+            }
+        }
+    })
+</script>
+
 </html>
