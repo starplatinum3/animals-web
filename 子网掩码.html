@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <!-- 这个不写 media没用  -->
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
@@ -100,9 +101,18 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
         <div>子网掩码:<input id="netMask" type="text" value="255.255.255.0" /></div>
         <div>输入IP地址范围 (必须在ip和mac相与的网段之间):<input type="text" id="addValue" /></div>
         <div><button id="btnClick">点击计算子网掩码&ip</button></div>
+      
+        subNetResult
         <div id="subNetResult">subNetResult</div>
         <!-- B类 A类 -->
         他是 B类 A类 网络吗？： <span id="classIP"> </span>
+
+        <div>
+
+    
+        <button id="btnToIndex">index</button>
+        <a href="index.html">index.html</a>
+    </div>
     </div>
 </body>
 <script type="text/javascript">
@@ -118,6 +128,9 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
         }
         return "C"
 
+    }
+    document.getElementById('btnToIndex').onclick=()=>{
+        window.location.href="index.html"
     }
     $("#btnClick").on("click", function () {
         var resultIp = $("#ip").val().split("."); //IP地址
