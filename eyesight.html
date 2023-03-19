@@ -78,72 +78,153 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
 <body>
     <div class="bodyDom">
 
+        <div>
+            1.近距离看电视、在昏暗灯光下阅读，会造成眼睛干涩。近距离阅读时，应保持60~100瓦灯泡亮度；阅读和使用计算机时，应避免刺眼的桌灯直射眼睛，并维持柔和照明。
+
+        </div>
+        <div>
+            2.长时间凝视显示器和电视，应该适时站起来注视远物、或向上看、左右转动，以舒缓疲劳。
+
+        </div>
+
+        <div>
+            3.有人认为“眼镜一戴就拿不下来了”，这种说法是错误的。一般来说，经过眼科医师验光，佩戴度数合适的镜片或隐形眼镜，能避免度数持续加深。
+
+        </div>
 
 
-<div>
-    长度 10  因子  0.7  
-    如果是 7  7/0.7 ==10  就是长度
-</div>
+        <div>
+         
+4.睡觉时，给儿童留一盏小灯，有助于他们练习对焦，及眼睛协调技能。
 
+        </div>
+        <div>
+         
+        
+5.适当补充维生素A可使人告别眼睛疲劳的困扰，但多吃无益。从食物中摄取营养素护眼，是较安全有效的做法，如胡萝卜、牛奶、蛋黄等食物都不错。
 
-        <input id="modTop" type="text" value="9" /> mod
-        <input id="modBottom" type="text" value="7" />
+                    </div>
+            
 
-        need mod <input id="needMod" type="text" value="1" />
-
-        <div><button id="btnCalMod">计算mod</button></div>
+<!-- 
         <div>
             modRes <span id="modRes"></span>
         </div>
         <div>
             chuyiRes <span id="chuyiRes"></span>
-
-        </div>
-        设散列表的长度为  <input id="hashTableLen" type="text" value="8" />
-        <div>
+        </div> -->
+        <!-- 设散列表的长度为 <input id="hashTableLen" type="text" value="8" /> -->
+        <!-- <div>
             chuyiRes 整除 <span id="chuyiResRound"></span>
-        </div>
-        <input id="inputList" type="text" value="7,34,55,25,64,46,20,10" />
+        </div> -->
+    
         <!-- 7,34,55,25,64,46,20,10 -->
         <!-- button onclick html -->
         <!-- <div><button id="btnCalModAllList" onclick="CalModList">计算mod AllList</button></div> -->
         <!-- 括号 才会调用  -->
-        <div><button id="btnCalModAllList" onclick="CalModList()">计算mod AllList</button></div>
+        <!-- <div><button id="btnCalModAllList" onclick="CalModList()">计算mod AllList</button></div> -->
 
         <!-- <div><button id="btnCalModAllList" click="CalModList">计算mod AllList</button></div> -->
 
-        <div id="resText"></div>
-        <div id="resHere">
-            <div class="resOne">
-                mod值 1，
-                整除 2 ，
-                除以的值 4242，
-                原来的数 4141，
-                9 % 7 == 2
-                9 / 7 == 2 ==
-            </div>
-        </div>
-
-        <hr>
-        </hr>
-        needModResCnt <span id="needModResCnt"> </span>
-        平均查找长度 <span id="AverageLookupLength"> </span>
-        
-        <div>
-            hash <span id="hash"> </span>
-        </div>
-       
-
-        <!-- Average lookup length -->
-        <!-- AverageLookupLength -->
-        <div>
-            <button id="btnToIndex">index</button>
-            <a href="index.html">index.html</a>
-        </div>
         <!-- 7,34,55,25,64,46,20,10 -->
     </div>
 </body>
 <script type="text/javascript">
+    function binSearch(arr, data) { //折半查找，也叫二分查找
+        console.log("data");
+        console.log(data);
+        console.log("arr");
+        console.log(arr);
+        var upperBound = arr.length - 1;
+        var lowerBound = 0;
+        let tryCnt=0
+        while (lowerBound <= upperBound) { //未遍历完
+            tryCnt++
+            var mid = Math.floor((lowerBound + upperBound) / 2);
+            // document.write("当前中点为：" + mid + '<br>'); //记录选中的中点
+            if (arr[mid] < data) {
+                lowerBound = mid + 1;
+            } else if (arr[mid] > data) {
+                upperBound = mid - 1;
+            } else {
+                // return mid;
+                let index=mid
+                return {
+                    index,
+                    tryCnt
+                }
+            }
+        }
+       let  index= -1;
+        return {
+                    index,
+                    tryCnt
+                }
+        // return -1;
+    }
+
+    function inputListStrToList(inputListStr) {
+        // inputListStr
+        inputListStr = inputListStr.replaceAll('，', ',')
+        inputListStr = inputListStr.replaceAll('、', ',')
+
+        inputListVals = inputListStr.split(',')
+
+        return inputListVals
+        // inputListVals.con 
+        // inputListVals = inputListVals.split(',')
+    }
+
+    // func 
+    function calBinSearch() { //折半查找，也叫二分查找
+        let inputListStr = document.getElementById('inputList').value
+        let inputList = inputListStrToList(inputListStr)
+        inputList=inputList.map(o=>parseInt(o))
+        //  target
+        // textContent
+        let target = document.getElementById('target').value 
+        // let target = document.getElementById('target').textContent
+        // let idx = binSearch(inputList, target)
+        let {index,tryCnt} = binSearch(inputList, target)
+let  idx=index
+        // inputList. 
+        let resStr = ""
+        for (let i = 0; i < inputList.length; i++) {
+            // inputList[i ]
+            if (i == idx) {
+                resStr += `(${inputList[i]}),`;
+            } else {
+                resStr += `${inputList[i]},`;
+            }
+        }
+        console.log("idx");
+        console.log(idx);
+        console.log(" inputList[idx]");
+        console.log( inputList[idx]);
+       
+        console.log("resStr");
+        console.log(resStr);
+//         对于数列4、5、6、7、9、12、18、23，如果采用折半查_百度笔试题_牛客网
+// https://www.nowcoder.com/questionTerminal/c96fa7dbc0a54663866d8ac116c28023?mutiTagIds=139&page=6&onlyReference=false
+        // document.getElementById
+     let    showCmtDom= document.getElementById('showCmt')
+        // showCmt
+        // document.getElementById('showCmt').textContent = resStr
+        
+document.getElementById('tryCnt').innerText=tryCnt
+
+        console.log("showCmtDom");
+        console.log(showCmtDom);
+        console.log("tryCnt");
+        console.log(tryCnt);
+        
+        showCmtDom.innerText=resStr
+
+
+    }
+    //         折半查找javascript_折半查找法js_布瑞泽的童话的博客-CSDN博客
+    // https://blog.csdn.net/mevicky/article/details/46008871
+
     function getIPType(resultIp) {
         let ipPart0 = resultIp[0]
         ipPart0Int = parseInt(ipPart0)
@@ -189,7 +270,7 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
     function getCalModValsHtml(modTopVal, modBottomVal) {
         // let needModResCnt=0
         let needMod = document.getElementById('needMod').value
-        
+
         let hashTableLen = document.getElementById('hashTableLen').value
 
         //    return  `<div class="resOne">
@@ -241,7 +322,7 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
         // modTop
         let needMod = document.getElementById('needMod').value
         let inputListVals = document.getElementById('inputList').value
-        
+
         let hashTableLen = document.getElementById('hashTableLen').value
 
         // 7，34，55，25，64，46，20，10
@@ -249,26 +330,26 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
         // str.includes('hello');
         // inputListVals.includes('，');
         // var n=str.replaceAll("Microsoft","Runoob");
-// 
+        // 
         // replaceALL js 
-//    var n=str.replaceAll("Microsoft","Runoob");
+        //    var n=str.replaceAll("Microsoft","Runoob");
         // inputListVals.replace('，',',')
-        inputListVals=  inputListVals.replaceAll('，',',')
+        inputListVals = inputListVals.replaceAll('，', ',')
 
         // inputListVals.con 
         inputListVals = inputListVals.split(',')
 
         // 设散列表的长度为8
-//         哈希表 相关笔试题_哈希表除留余数法例题_小旋锋的博客-CSDN博客
-// https://blog.csdn.net/wwwdc1012/article/details/77926956
+        //         哈希表 相关笔试题_哈希表除留余数法例题_小旋锋的博客-CSDN博客
+        // https://blog.csdn.net/wwwdc1012/article/details/77926956
         // let len= inputListVals.length
-        let len=  hashTableLen
+        let len = hashTableLen
         // hashTableLen
         let modBottomVal = document.getElementById('modBottom').value
         let resText = ""
         let resHtml = ""
-        let  hash=[]
-        for(let i=0;i<len;i++){
+        let hash = []
+        for (let i = 0; i < len; i++) {
             hash.push([])
         }
         let needModResCnt = 0
@@ -280,8 +361,8 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
             resText += JSON.stringify(
                 CalModVals(inputListVal, modBottomVal)
             )
-            let modRes=inputListVal % modBottomVal
-            hash[modRes]?.push({
+            let modRes = inputListVal % modBottomVal
+            hash[modRes] ?.push({
                 modRes,
                 inputListVal,
                 modBottomVal
@@ -304,17 +385,17 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
         console.log(hash);
         // hash
         document.getElementById('hash').textContent = JSON.stringify(hash)
-        let res=0
+        let res = 0
 
-        for(let link of hash){
+        for (let link of hash) {
 
-            for(let i=0;i<link.length;i++){
-                res+=i+1;
+            for (let i = 0; i < link.length; i++) {
+                res += i + 1;
             }
         }
         console.log("res");
         console.log(res);
-        document.getElementById('AverageLookupLength').textContent = res /inputListVals.length
+        document.getElementById('AverageLookupLength').textContent = res / inputListVals.length
 
         // AverageLookupLength
 
@@ -408,21 +489,6 @@ https://blog.csdn.net/qq_36509946/article/details/105950926 -->
             }
         }
     })
-
-    
-    let  codePart=`// 定义一个常量N表示待排序个数 const N = 10; // 定义一个数组R存放待排序的元素 let R = [10,18,4,3,6,12,1,9,18,8]; // 定义一个函数来划分数组 function partition(array, left, right) { // 选择最后一个元素作为基准 let pivot = array[right]; // 定义一个指针i指向左边界前面 let i = left - 1; // 遍历数组中除了最后一个元素以外的所有元素 for (let j = left; j < right; j++) { // 如果当前遍历到的元素小于等于基准 if (array[j] <= pivot) { // 将i向右移动一位 i++; // 将array[i]和array[j]交换位置 [array[i], array[j]] = [array[j], array[i]]; } } // 将array[i + 1]和array[right]交换位置，即将基准放在正确的位置上 [array[i + 1], array[right]] = [array[right], array[i + 1]]; // 返回基准所在下标 return i + 1; }
-
-// 定义一个函数来实现快速排序算法 function quickSort(array, left, right) { // 如果左边界小于右边界，说明还有至少两个以上的元素需要排序 if (left < right) { // 调用partition函数对数组进行划分，并得到基准所在下标 let pivotIndex = partition(array, left, right); // 对左半部分递归地进行快速排序 quickSort(array, left, pivotIndex - 1); // 对右半部分递归地进行快速排序 quickSort(array, pivotIndex + 1, right); } }
-
-// 调用一次partition函数得到第一趟结果，并打印出来 let pivotIndex = partition(R ,0 ,N-1); console.log®;`
-
-let  writeCode=
-// codePart.replace("//","\\\n//")
-codePart.replace("//","\n//")
-
-console.log("writeCode");
-console.log(writeCode);
-
 </script>
 
 </html>

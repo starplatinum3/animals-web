@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- 这个不写 media没用  -->
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="320" name="MobileOptimized">
+
+    <!-- D:\proj\js\animals-web\mikutap-web\js\jquery.min.js -->
+    <!-- <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script> -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <style>
+        .needModResColor {
+            color: red;
+        }
+
+        .bodyDom {
+            /* width: 300px; */
+            /* font-size: 30px; */
+            /* font-size:5rem; */
+            /* font-size:1rem; */
+            /* font-size:2rem; */
+            /* font-size: 30px; */
+            /* font-size: 50px; */
+            /* overflow-x:hidden; */
+            /* overflow: auto; */
+        }
+
+        @media only screen and (max-width: 480px) {
+
+            /* //此适配不同手机型号下文字，图片的大小 */
+            .bodyDom {
+                /* width: 300px; */
+                font-size: 30px;
+            }
+        }
+
+        /* 小屏幕手机端 */
+        @media (min-width: 0px) and (max-width:768px) {
+
+            /* .div1{
+					width: 100px;
+					height: 100px;
+					background-color: red;
+				} */
+            .bodyDom {
+                /* width: 300px; */
+                /* font-size: 30px; */
+                font-size: 25px;
+                /* font-size: 50px; */
+
+            }
+
+            input {
+                font-size: 30px;
+            }
+
+            button {
+                font-size: 30px;
+            }
+        }
+
+        /* ————————————————
+版权声明：本文为CSDN博主「大前端工程师」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/chengqige/article/details/117844872 */
+    </style>
+</head>
+<!-- js实现ip地址和子网掩码功能计算，并判断指定ip地址是否在网段之间_js 子网掩码计算_笑到世界都狼狈的博客-CSDN博客
+https://blog.csdn.net/qq_36509946/article/details/105950926 -->
+
+<body>
+    <div class="bodyDom">
+
+
+        <!-- 
+        <div>
+            长度 10 因子 0.7
+            如果是 7 7/0.7 ==10 就是长度
+        </div> -->
+
+
+        <!-- <input id="modTop" type="text" value="9" /> mod
+        <input id="modBottom" type="text" value="7" /> -->
+
+        <!-- need mod <input id="needMod" type="text" value="1" /> -->
+
+        <!-- <div><button id="btnCalMod">计算mod</button></div> -->
+        <input id="inputList" type="text" value="7,34,55,25,64,46,20,10" />
+        <!-- <input id="target" type="text" value="7" /> -->
+
+        <!-- <div><button id="btnCal" onclick="calBinSearch()">折半查找需要多少</button></div> -->
+        <div><button id="startQuickSortBtn" onclick="startQuickSort()">startQuickSort</button></div>
+
+        <!-- tryCnt -->
+        <!-- <div>
+            tryCnt 查询次数 <span id="tryCnt"> </span>
+        </div> -->
+
+        <!-- <div>
+            showCmt <span id="showCmt"> </span>
+        </div> -->
+
+
+        <!-- 
+        <div>
+            modRes <span id="modRes"></span>
+        </div>
+        <div>
+            chuyiRes <span id="chuyiRes"></span>
+        </div> -->
+        <!-- 设散列表的长度为 <input id="hashTableLen" type="text" value="8" /> -->
+        <!-- <div>
+            chuyiRes 整除 <span id="chuyiResRound"></span>
+        </div> -->
+
+        <!-- 7,34,55,25,64,46,20,10 -->
+        <!-- button onclick html -->
+        <!-- <div><button id="btnCalModAllList" onclick="CalModList">计算mod AllList</button></div> -->
+        <!-- 括号 才会调用  -->
+        <!-- <div><button id="btnCalModAllList" onclick="CalModList()">计算mod AllList</button></div> -->
+
+        <!-- <div><button id="btnCalModAllList" click="CalModList">计算mod AllList</button></div> -->
+
+        <!-- <div id="resText"></div> -->
+        <!-- <div id="resHere">
+            <div class="resOne">
+                mod值 1，
+                整除 2 ，
+                除以的值 4242，
+                原来的数 4141，
+                9 % 7 == 2
+                9 / 7 == 2 ==
+            </div>
+        </div> -->
+
+        startList
+        <div id="startList"></div>
+
+        QuickSortRoundStr
+        <div id="QuickSortRoundStr"></div>
+
+        <hr>
+        </hr>
+        needModResCnt <span id="needModResCnt"> </span>
+        平均查找长度 <span id="AverageLookupLength"> </span>
+
+        <div>
+            hash <span id="hash"> </span>
+        </div>
+
+
+        <!-- Average lookup length -->
+        <!-- AverageLookupLength -->
+        <div>
+            <button id="btnToIndex">index</button>
+            <a href="index.html">index.html</a>
+        </div>
+        <!-- 7,34,55,25,64,46,20,10 -->
+    </div>
+</body>
+<script type="text/javascript">
+    function binSearch(arr, data) { //折半查找，也叫二分查找
+        console.log("data");
+        console.log(data);
+        console.log("arr");
+        console.log(arr);
+        var upperBound = arr.length - 1;
+        var lowerBound = 0;
+        let tryCnt = 0
+        while (lowerBound <= upperBound) { //未遍历完
+            tryCnt++
+            var mid = Math.floor((lowerBound + upperBound) / 2);
+            // document.write("当前中点为：" + mid + '<br>'); //记录选中的中点
+            if (arr[mid] < data) {
+                lowerBound = mid + 1;
+            } else if (arr[mid] > data) {
+                upperBound = mid - 1;
+            } else {
+                // return mid;
+                let index = mid
+                return {
+                    index,
+                    tryCnt
+                }
+            }
+        }
+        let index = -1;
+        return {
+            index,
+            tryCnt
+        }
+        // return -1;
+    }
+
+    function inputListStrToList(inputListStr) {
+        // inputListStr
+        inputListStr = inputListStr.replaceAll('，', ',')
+        inputListStr = inputListStr.replaceAll('、', ',')
+
+        inputListVals = inputListStr.split(',')
+
+        return inputListVals
+        // inputListVals.con 
+        // inputListVals = inputListVals.split(',')
+    }
+
+
+    //     哈夫曼树的js实现_赫夫曼树及其实现 js_林飞叶的博客-CSDN博客
+    // https://blog.csdn.net/u014390748/article/details/104504205
+    // 哈弗曼编码是将一个 字符串序列 用 二进制表示 的压缩算法  
+    class huffmanTree {
+        constructor(str) {
+            // 第一步，统计字符出现频率  
+            let hash = {};
+            for (let i = 0; i < str.length; i++) {
+                hash[str[i]] = ~~hash[str[i]] + 1;
+            }
+            this.hash = hash;
+
+            // 构造哈夫曼树  
+            this.huffmanTree = this.getHuffmanTree();
+
+            let map = this.getHuffmanCode(this.huffmanTree);
+            // 查看对照表，即每个字符的二进制编码是什么  
+            console.log(map);
+
+            // 最终的二进制编码  
+            this.binaryStr = this.getBinaryStr(map, str);
+        }
+
+        // 构造哈夫曼树  
+        getHuffmanTree() {
+            // 以各个字符出现次数为node.val, 构造森林  
+            let forest = []
+            for (let char in this.hash) {
+                let node = new Node(this.hash[char], char);
+                forest.push(node);
+            }
+
+            // 等到森林只剩一个节点时，表示合并过程结束，树就生成了  
+            let allNodes = []; // 存放被合并的节点，因为不能真的删除森林中任何一个节点，否则.left .right就找不到节点了  
+            while (forest.length !== 1) {
+                // 从森林中找到两个最小的树，合并之  
+                forest.sort((a, b) => {
+                    return a.val - b.val;
+                });
+
+                let node = new Node(forest[0].val + forest[1].val, '');
+                allNodes.push(forest[0]);
+                allNodes.push(forest[1]);
+                node.left = allNodes[allNodes.length - 2]; // 左子树放置词频低的  
+                node.right = allNodes[allNodes.length - 1]; // 右子树放置词频高的  
+
+                // 删除最小的两棵树  
+                forest = forest.slice(2);
+                // 新增的树加入  
+                forest.push(node);
+            }
+
+            // 生成的哈夫曼树  
+            return forest[0];
+        }
+
+        // 遍历哈夫曼树，返回一个 原始字符 和 二进制编码 的对照表  
+        getHuffmanCode(tree) {
+            let hash = {}; // 对照表
+            let traversal = (node, curPath) => {
+                if (!node.length && !node.right) return;
+                if (node.left && !node.left.left && !node.left.right) {
+                    hash[node.left.char] = curPath + '0';
+                }
+                if (node.right && !node.right.left && !node.right.right) {
+                    hash[node.right.char] = curPath + '1';
+                }
+                // 往左遍历，路径加0  
+                if (node.left) {
+                    traversal(node.left, curPath + '0');
+                }
+                // 往右遍历，路径加1  
+                if (node.right) {
+                    traversal(node.right, curPath + '1');
+                }
+            };
+            traversal(tree, '');
+            return hash;
+        }
+
+        // 返回最终的压缩后的二进制串  
+        getBinaryStr(map, originStr) {
+            let result = '';
+            for (let i = 0; i < originStr.length; i++) {
+                result += map[originStr[i]];
+            }
+            return result;
+        }
+    }
+
+
+    class Node {
+        constructor(value, char, left, right) {
+            this.val = value; // 字符出现次数  
+            this.char = char; // 待编码字符  
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    // D:\proj\js\animals-web\huffman.html
+    function huffman() {
+        // hello world
+        let str = "hello world"
+        let map = new Map()
+        for (let ch of str) {
+            let cnt = map.get(ch) || 0
+            // map.put(ch,cnt+1)
+            map.set(ch, cnt + 1)
+
+        }
+
+        console.log("map");
+        console.log(map);
+        //    let tree = new huffmanTree('ABBCCCDDDDEEEEE')  
+
+        let tree = new huffmanTree(str)
+        console.log("tree")
+        console.log(tree)
+
+
+    }
+
+    // huffman()
+
+    function startQuickSort(){
+        let inputListStr = document.getElementById('inputList').value
+        let inputList = inputListStrToList(inputListStr)
+        inputList = inputList.map(o => parseInt(o))
+        //  target
+        // textContent
+        // let target = document.getElementById('target').value
+        quickSort(inputList,0,inputList.length-1)
+    }
+    // func 
+    function calBinSearch() { //折半查找，也叫二分查找
+        let inputListStr = document.getElementById('inputList').value
+        let inputList = inputListStrToList(inputListStr)
+        inputList = inputList.map(o => parseInt(o))
+        //  target
+        // textContent
+        let target = document.getElementById('target').value
+        // let target = document.getElementById('target').textContent
+        // let idx = binSearch(inputList, target)
+        let {
+            index,
+            tryCnt
+        } = binSearch(inputList, target)
+        let idx = index
+        // inputList. 
+        let resStr = ""
+        for (let i = 0; i < inputList.length; i++) {
+            // inputList[i ]
+            if (i == idx) {
+                resStr += `(${inputList[i]}),`;
+            } else {
+                resStr += `${inputList[i]},`;
+            }
+        }
+        console.log("idx");
+        console.log(idx);
+        console.log(" inputList[idx]");
+        console.log(inputList[idx]);
+
+        console.log("resStr");
+        console.log(resStr);
+        //         对于数列4、5、6、7、9、12、18、23，如果采用折半查_百度笔试题_牛客网
+        // https://www.nowcoder.com/questionTerminal/c96fa7dbc0a54663866d8ac116c28023?mutiTagIds=139&page=6&onlyReference=false
+        // document.getElementById
+        let showCmtDom = document.getElementById('showCmt')
+        // showCmt
+        // document.getElementById('showCmt').textContent = resStr
+
+        document.getElementById('tryCnt').innerText = tryCnt
+
+        console.log("showCmtDom");
+        console.log(showCmtDom);
+        console.log("tryCnt");
+        console.log(tryCnt);
+
+        showCmtDom.innerText = resStr
+
+
+    }
+    //         折半查找javascript_折半查找法js_布瑞泽的童话的博客-CSDN博客
+    // https://blog.csdn.net/mevicky/article/details/46008871
+
+    function getIPType(resultIp) {
+        let ipPart0 = resultIp[0]
+        ipPart0Int = parseInt(ipPart0)
+        if (ipPart0Int <= 126) {
+            // 1.0.0.1－126.255.255.254；
+            return "A"
+        }
+        if (ipPart0Int <= 191) {
+            return "B"
+        }
+        return "C"
+
+    }
+
+
+    function CalModVals(modTopVal, modBottomVal) {
+        // modTop
+
+        // let modTopVal = document.getElementById('modTop').value
+        // let modBottomVal = document.getElementById('modBottom').value
+        // let modTopVal = document.getElementById('modTop').value
+        // let modBottomVal = document.getElementById('modBottom').value
+        // document.getElementById('modRes').innerText =
+        // document.getElementById('modRes').innerText =
+        // modTopVal % modBottomVal
+
+        // document.getElementById('chuyiRes').innerText = modTopVal / modBottomVal
+        // document.getElementById('chuyiResRound').innerText =
+        //     Math.round(
+        //         modTopVal / modBottomVal
+        //     )
+
+        return {
+            modRes: modTopVal % modBottomVal,
+            chuyiRes: modTopVal / modBottomVal,
+            chuyiResRound: Math.round(
+                modTopVal / modBottomVal
+            )
+        }
+
+    }
+
+    function getCalModValsHtml(modTopVal, modBottomVal) {
+        // let needModResCnt=0
+        let needMod = document.getElementById('needMod').value
+
+        let hashTableLen = document.getElementById('hashTableLen').value
+
+        //    return  `<div class="resOne">
+        //           mod值  ${modTopVal % modBottomVal}，
+        //           整除 ${ Math.round(
+        //             modTopVal / modBottomVal
+        //         )} ，
+        //            除以的值 ${modTopVal / modBottomVal},
+        //             原来的数 ${modTopVal}，
+        //         </div>`
+        let modRes = modTopVal % modBottomVal
+        let modResHtml = `
+        <span>  ${modRes}</span>
+        `
+
+
+        if (needMod == modRes) {
+            // needModResCnt++
+            modResHtml = `
+        <span  class="needModResColor" > ${modRes}</span>
+        `
+        }
+
+
+        return `
+        <hr></hr>
+        <div class="resOne">
+                ${modTopVal} % ${modBottomVal}== ${modResHtml}
+                <br>
+
+                ${modTopVal} /${modBottomVal}== ${ Math.round(
+                modTopVal / modBottomVal
+            )}  ==  ${modTopVal / modBottomVal}
+
+           
+            </div>`
+        // return {
+        //     modRes: modTopVal % modBottomVal,
+        //     chuyiRes: modTopVal / modBottomVal,
+        //     chuyiResRound: Math.round(
+        //         modTopVal / modBottomVal
+        //     )
+        // }
+
+    }
+
+    // function CalModList() {
+    //     console.log('CalModList');
+    //     // modTop
+    //     let needMod = document.getElementById('needMod').value
+    //     let inputListVals = document.getElementById('inputList').value
+
+    //     let hashTableLen = document.getElementById('hashTableLen').value
+
+    //     // 7，34，55，25，64，46，20，10
+    //     // ， js 字符串 查找 存在
+    //     // str.includes('hello');
+    //     // inputListVals.includes('，');
+    //     // var n=str.replaceAll("Microsoft","Runoob");
+    //     // 
+    //     // replaceALL js 
+    //     //    var n=str.replaceAll("Microsoft","Runoob");
+    //     // inputListVals.replace('，',',')
+    //     inputListVals = inputListVals.replaceAll('，', ',')
+
+    //     // inputListVals.con 
+    //     inputListVals = inputListVals.split(',')
+
+    //     // 设散列表的长度为8
+    //     //         哈希表 相关笔试题_哈希表除留余数法例题_小旋锋的博客-CSDN博客
+    //     // https://blog.csdn.net/wwwdc1012/article/details/77926956
+    //     // let len= inputListVals.length
+    //     let len = hashTableLen
+    //     // hashTableLen
+    //     let modBottomVal = document.getElementById('modBottom').value
+    //     let resText = ""
+    //     let resHtml = ""
+    //     let hash = []
+    //     for (let i = 0; i < len; i++) {
+    //         hash.push([])
+    //     }
+    //     let needModResCnt = 0
+    //     for (let i = 0; i < inputListVals.length; i++) {
+    //         let inputListVal = inputListVals[i]
+    //         console.log("inputListVal");
+    //         console.log(inputListVal);
+
+    //         resText += JSON.stringify(
+    //             CalModVals(inputListVal, modBottomVal)
+    //         )
+    //         let modRes = inputListVal % modBottomVal
+    //         hash[modRes] ?.push({
+    //             modRes,
+    //             inputListVal,
+    //             modBottomVal
+    //         })
+    //         if ((inputListVal % modBottomVal) == needMod) {
+    //             needModResCnt++
+    //         }
+    //         // needModResCnt+= (inputListVal % modBottomVal )==needMod
+    //         // inputListVal
+    //         // needModResCnt 
+    //         resHtml += getCalModValsHtml(inputListVal, modBottomVal)
+    //         // resText +=
+    //         //     CalModVals(inputListVal)
+    //     }
+    //     // document.getElementById('resText').innerText = resText
+    //     document.getElementById('resHere').innerHTML = resHtml
+    //     document.getElementById('needModResCnt').innerHTML = needModResCnt
+
+    //     console.log("hash");
+    //     console.log(hash);
+    //     // hash
+    //     document.getElementById('hash').textContent = JSON.stringify(hash)
+    //     let res = 0
+
+    //     for (let link of hash) {
+
+    //         for (let i = 0; i < link.length; i++) {
+    //             res += i + 1;
+    //         }
+    //     }
+    //     console.log("res");
+    //     console.log(res);
+    //     document.getElementById('AverageLookupLength').textContent = res / inputListVals.length
+
+    //     // AverageLookupLength
+
+    //     // needModResCnt
+    //     // let modTopVal = document.getElementById('modTop').value
+    //     // let modBottomVal = document.getElementById('modBottom').value
+    //     // // document.getElementById('modRes').innerText =
+    //     // document.getElementById('modRes').innerText =
+    //     //     document.getElementById('modTop').value % document.getElementById('modBottom').value
+
+    //     // document.getElementById('chuyiRes').innerText = modTopVal / modBottomVal
+    //     // document.getElementById('chuyiResRound').innerText =
+    //     //     Math.round(
+    //     //         modTopVal / modBottomVal
+    //     //     )
+
+    // }
+
+    function CalMod() {
+        // modTop
+
+        let modTopVal = document.getElementById('modTop').value
+        let modBottomVal = document.getElementById('modBottom').value
+        // document.getElementById('modRes').innerText =
+        document.getElementById('modRes').innerText =
+            document.getElementById('modTop').value % document.getElementById('modBottom').value
+
+        document.getElementById('chuyiRes').innerText = modTopVal / modBottomVal
+        document.getElementById('chuyiResRound').innerText =
+            Math.round(
+                modTopVal / modBottomVal
+            )
+
+    }
+
+    // var quickSort = function (arr,allElms) {
+
+    //     if (arr.length <= 1) {
+    //         return arr;
+    //     }
+
+    //     //   var pivotIndex = Math.floor(arr.length / 2);
+    //     var pivotIndex = 0
+
+    //     var pivot = arr.splice(pivotIndex, 1)[0];
+
+    //     var left = [];
+
+    //     var right = [];
+
+    //     for (var i = 0; i < arr.length; i++) {
+
+    //         if (arr[i] < pivot) {
+
+    //             left.push(arr[i]);
+
+    //         } else {
+
+    //             right.push(arr[i]);
+
+    //         }
+
+    //     }
+
+    //     let arrOne = quickSort(left,allElms).concat([pivot], quickSort(right,allElms));
+
+    //     console.log("allElms");
+    //     console.log(allElms);
+
+    //     return arrOne
+
+    // };
+
+    let  QuickSortRoundStr=""
+    function quickSort(arr,begin,end){
+            if(begin < end){
+                let i = begin;
+                let j = end;
+                let empty = arr[begin];
+                while(i < j){
+                    while(arr[j] > empty && i < j){
+                        j --;
+                    }
+                    arr[i] = arr[j];
+                    while(arr[i] < empty && i < j){
+                        i ++;
+                    }
+                    arr[j] = arr[i];
+                }
+                arr[i] = empty;
+                console.log("arr");
+                console.log(arr);
+                let roundArr=JSON.stringify(arr)
+        QuickSortRoundStr+=roundArr+"\n"
+        document.getElementById('QuickSortRoundStr').innerText = QuickSortRoundStr
+                quickSort(arr,begin,i-1);
+                quickSort(arr,i+1,end);
+            }else{
+                return;
+            }
+        }
+
+        // // test start /////////////////////////......
+        // // let arr = [2,3,1,4,8,7,9,6];
+        // let arr =  [20,15,14,18,21,36,40,10]
+     
+        // // 20，15，14，18，21，36，40，10
+        // // quickSort(arr,0,7);
+        // quickSort(arr,0,arr.length-1);
+        // console.log("arr sort res");
+        // console.log(arr);
+        //    // test end /////////////////////////................
+
+
+// ————————————————
+// 版权声明：本文为CSDN博主「搞前端的小菜」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+// 原文链接：https://blog.csdn.net/weixin_46726346/article/details/115839126
+
+    // console.log("quickSort");
+
+    // // quickSort([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
+    // let res = quickSort([3, 1, 31, 4, 1, 4, 14, 1, 41])
+    // console.log("quickSort res");
+    // console.log(res);
+
+    // let R = {10,18,4,3,6,12,1,9,18,8};
+    // let R = [10,18,4,3,6,12,1,9,18,8];
+
+    // startList
+    // document.getElementById('startList').innerText=JSON.stringify(R)
+    document.getElementById('startList').innerText=JSON.stringify(arr)
+
+//  C语言快速排列求打印每一趟结果算法 - 『编程语言区』 - 吾爱破解 - LCG - LSG |安卓破解|病毒分析|www.52pojie.cn
+// https://www.52pojie.cn/thread-894274-1-1.html
+ 
+ 
+function printf(str){
+
+    // js  不打印 换行
+    console.log(str);
+
+}
+
+function Partition( R,  i,  j)//划分函数(用于返回基准位置,并排序)
+{
+    
+    //1.判断右边是否小于关键字，是的话，R[左指针]=R[右指针]。左指针右移
+ //2.判断左边是否大于关键字，是的话，R[右指针]=R[左指针]。右指针左移
+ //3.R[左指针]=R[关键字]
+    let pivot = R[i];//用顺序表的第一个值作为基准位置
+    let  bool1 = 0;
+    let  N=R.length
+    if (i < j)
+        bool1 = 1;
+    while (i < j)//用于左右的标识如果重叠时结束循环
+    {
+        while (i < j&&R[j].key >= pivot.key)//判断右边的值是否大于等于基准位置的值
+        {
+            j--;//是的话，右标识左移，直到右边比关键字小或等于，或者左右标识重叠为止
+        }
+        if (i < j)
+        {
+            R[i++] = R[j];//找到的话，左边的数组等于右边数组。然后左标识要右移
+ 
+        }
+             
+ 
+        while (i < j&&R[i].key <= pivot.key)//判断左边的值是否小于等于基准位置的值
+        {
+            i++;//是的话，左边标识要右移，直到左边标识的值比基准位置的值小
+        }
+        if (i < j)
+ 
+        {
+            R[j--] = R[i];
+ 
+        }
+             
+    }
+    R[i] = pivot;//R[左指针]=R[关键字]
+    // console.log("R");
+    // console.log(R);
+
+    if (bool1)
+    {
+        printf("---------------------------\n");
+        let  resStr=""
+        for (let z = 0; z <= N-1; z++)
+            if(z==i){
+                resStr+=`[${R[z]}],`
+            }else{
+                // resStr+=`"${R[z]},"`
+                resStr+=`${R[z]},`
+
+            }
+            // if(z==i)
+            //     printf("[%d],", R[z]);
+            // else
+            //     printf("%d,", R[z]);
+        // printf("\n");
+        
+        console.log(resStr);
+        QuickSortRoundStr+=resStr+"\n"
+        // QuickSortRoundStr. 
+        document.getElementById('QuickSortRoundStr').innerText=QuickSortRoundStr
+    }
+    // QuickSortRoundStr
+     
+ 
+    return i;
+}
+
+// C语言快速排列求打印每一趟结果算法 - 『编程语言区』 - 吾爱破解 - LCG - LSG |安卓破解|病毒分析|www.52pojie.cn
+// https://www.52pojie.cn/thread-894274-1-1.html
+function QuickSort( R,  low,  high)//快速排序(两个函数递归)
+{
+    let pivot;//基准位置
+    if (low < high)
+    {//位置大于1才需要排序
+        pivot = Partition(R, low, high);//调用划分函数
+        // pivot Idx 
+        QuickSort(R, low, pivot-1);//最低和基准位置的排序
+        QuickSort(R, pivot + 1, high);//最高和基准位置右边之间的排序
+    }
+}
+
+// QuickSort(R, 0, R.length-1);
+// console.log("end R");
+// console.log(R);
+// 20，15，14，18，21，36，40，10
+//  R=[20,15,14,18,21,36,40,10]
+// quickSort(R,R);
+// quickSort(R,R);
+
+    // 定义一个常量N表示待排序个数
+    // const N = 10;
+    // // 定义一个数组R存放待排序的元素 
+    // let R = [10, 18, 4, 3, 6, 12, 1, 9, 18, 8]; // 定义一个函数来划分数组
+    // function partition(array, left, right) {
+    //     // 选择最后一个元素作为基准 
+    //     let pivot = array[right];
+    //     // 定义一个指针i指向左边界前面 
+    //     let i = left - 1; // 遍历数组中除了最后一个元素以外的所有元素
+    //     for (let j = left; j < right; j++) {
+    //         // 如果当前遍历到的元素小于等于基准
+    //         if (array[j] <= pivot) {
+    //             // 将i向右移动一位 i++; 
+    //             // 将array[i]和array[j]交换位置
+    //             [array[i], array[j]] = [array[j], array[i]];
+    //         }
+    //     }
+    //     // 将array[i + 1]和array[right]交换位置，即将基准放在正确的位置上
+    //     [array[i + 1], array[right]] = [array[right], array[i + 1]];
+    //     // 返回基准所在下标 return i + 1; 
+    // }
+    // // 定义一个函数来实现快速排序算法 
+    // function quickSort(array, left, right) {
+    //     // 如果左边界小于右边界，说明还有至少两个以上的元素需要排序 
+    //     if (left < right) {
+    //         // 调用partition函数对数组进行划分，并得到基准所在下标 
+    //         let pivotIndex = partition(array, left, right);
+    //         // 对左半部分递归地进行快速排序 
+    //         quickSort(array, left, pivotIndex - 1);
+    //         // 对右半部分递归地进行快速排序
+    //         quickSort(array, pivotIndex + 1, right);
+    //     }
+    // }
+    // // 调用一次partition函数得到第一趟结果，并打印出来 
+    // let pivotIndex = partition(R, 0, N - 1);
+    // console.log("第一趟排序结果：");
+    // console.log(pivotIndex);
+    // console.log(R);
+
+    // 输出结果为：
+    // [8,9,4,3,6,12,1,10,18,18]
+
+    document.getElementById('btnToIndex').onclick = () => {
+        window.location.href = "index.html"
+    }
+    document.getElementById('btnCalMod').onclick = () => {
+        CalMod()
+    }
+
+    $("#btnClick").on("click", function () {
+        var resultIp = $("#ip").val().split("."); //IP地址
+        var resultMask = $("#netMask").val().split("."); //子网掩码
+        var resultAddValue = $("#addValue").val().split("."); //输入IP地址范围
+        //			console.log('resultIp',resultIp);
+        //			console.log('resultMask',resultMask);
+        //			console.log('resultAddValue',resultAddValue);
+
+        // classIP
+        let classIPDom =
+            document.getElementById("classIP")
+
+        let ipType = getIPType(resultIp)
+
+        classIPDom.innerHTML = `${ipType} 类网络`
+
+        //    let ipPart0=  resultIp[0]
+        //    ipPart0Int=parseInt(ipPart0)
+        //    if(ipPart0Int<=126){
+        //     // 1.0.0.1－126.255.255.254；
+        //    }
+        //    classIPDom.innerHTML = resultIp[0];
+        //将输入IP范围转换成整数
+        var resultAddValueNumber = Number(resultAddValue[0]) * 256 * 256 * 256 + Number(resultAddValue[1]) *
+            256 * 256 + Number(resultAddValue[2]) * 256 + Number(resultAddValue[3]);
+        //	    	console.log('resultAddValueNumber',resultAddValueNumber);
+        var subNet = []; //ip地址与子网掩码相与的网段结果
+        for (var i = 0, num = resultIp.length; i < num; i++) {
+            var c = parseInt(resultIp[i]) & parseInt(resultMask[i]);
+            subNet.push(c);
+        }
+        subNet = subNet.join(".");
+        // console.log(subNet);
+        var subNetResult = subNet.split(".");
+        document.getElementById("subNetResult").innerHTML = subNetResult;
+        //	        console.log('subNetResult',subNetResult);
+        //限制输入范围在相与结果网段，最低位为1-255,将其转换成整数
+        var ipLeftNumber = Number(subNetResult[0]) * 256 * 256 * 256 + Number(subNetResult[1]) * 256 * 256 +
+            Number(subNetResult[2]) * 256 + Number(1);
+        var ipRightNumber = Number(subNetResult[0]) * 256 * 256 * 256 + Number(subNetResult[1]) * 256 * 256 +
+            Number(subNetResult[2]) * 256 + Number(255);
+        //	        console.log('ipLeftNumber',ipLeftNumber);
+        //	        console.log('ipRightNumber',ipRightNumber);
+        if ($("#addValue").val() != "") {
+            //如果输入IP，判断在不在范围内
+            if (resultAddValueNumber < ipLeftNumber || resultAddValueNumber > ipRightNumber) {
+                console.log('超出IP网段范围');
+            } else {
+                console.log('成功');
+            }
+        }
+    })
+</script>
+
+</html>
