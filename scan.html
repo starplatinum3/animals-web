@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>SCAN磁盘调度算法</h2>
+    <label for="currentTrack">当前磁道号:</label>
+    <input type="number" id="currentTrack" value="116"><br><br>
+    <label for="requestSequence">访问请求序列:</label>
+    <input type="text" id="requestSequence" value="48, 59, 37, 81, 125, 195, 185, 205"><br><br>
+    <button onclick="runScan()">运行SCAN算法</button>
+    <p id="result"></p>
+    <script>
+      function runScan() {
+        const currentTrack = Number(document.getElementById("currentTrack").value);
+        const requestSequence = document.getElementById("requestSequence").value.split(",").map(Number);
+        const maxTrack = Math.max(...requestSequence);
+        const minTrack = Math.min(...requestSequence);
+
+        let direction = "up";
+        let visited = [];
+        if (currentTrack <= maxTrack) {
+          // Move up
+          let i = requestSequence.findIndex(track => track > currentTrack);
+          if (i === -1) {
+            i = requestSequence.length;
+            direction = "down";
+          }
+          visited = requestSequence.slice(i).sort((a, b) => a - b);
+          if (direction === "down") {
+            visited = visited.concat(requestSequence.slice(0, i).sort((a, b) => b - a));
+          }
+        } else {
+          // Move down
+          let i = requestSequence.findIndex(track => track < currentTrack);
+          if (i === -1) {
+            i = 0;
+            direction = "up";
+          }
+          visited = requestSequence.slice(0, i + 1).sort((a, b) => b - a);
+          if (direction === "up") {
+            visited = visited.concat(requestSequence.slice(i + 1).sort((a, b) => a - b));
+          }
+        }
+
+        const result = document.getElementById("result");
+        result.innerText = `SCAN磁盘调度算法访问顺序为：${visited.join(", ")}`;
+      }
+    </script>
+  </body>
+</html>

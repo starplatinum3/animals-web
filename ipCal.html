@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>IP地址计算</title>
+</head>
+<body>
+	<h2>IP地址计算</h2>
+	<p>IP地址：152.178.132.95/27</p>
+	<p>确定在第四段，n为32-27=5</p>
+	<p>主机位ip有2^5=32种取值</p>
+	<p>95/32取整为2，余31</p>
+	<p>95的二进制为0101 1111</p>
+	<p>网络位是3位，010</p>
+	<p>主机位是1 1111，显然是广播地址，a不符合</p>
+	<script>
+
+        function networkPointGet(binaryNetwork = "01010100101100101100110010000000"){
+
+            console.log("binaryNetwork.length");
+            console.log(binaryNetwork.length);
+            // "01010 1001 0110 0101100110010000000"
+        // var binaryNetwork = "01010100101100101100110010000000"; // 示例二进制字符串
+
+var network = ""; // 用于存储最终的IP地址
+
+// 将二进制字符串每8位加一个点
+for (var i = 0; i < binaryNetwork.length; i += 8) {
+    if (i > 0) {
+        network += ".";
+    }
+    network += binaryNetwork.substring(i, i + 8);
+}
+console.log(network); // 输出结果：01010100.10110010.11001100.10000000
+
+return network
+}
+
+function colorLast(binaryIp = "01011010100101100110001001010101",n = 8){
+    // var binaryIp = "01011010100101100110001001010101"; // 示例二进制字符串
+// var n = 8; // 示例n值
+
+let binaryIpShow = ""; // 用于存储最终的带有样式的二进制字符串
+
+// 将二进制字符串每8位加一个空格
+for (var i = 0; i < binaryIp.length; i += 8) {
+    // binaryIpShow += binaryIp.substring(i, i + 8) + " ";
+    binaryIpShow += binaryIp.substring(i, i + 8) ;
+}
+
+// 前面的  32-8 是 白色 
+// 将最后n位用红色字体显示
+binaryIpShow = binaryIpShow.substring(0, binaryIpShow.length - n) +
+               "<span style='color: red'>" +
+               binaryIpShow.substring(binaryIpShow.length - n) +
+               "</span>";
+            //    从  32-8 开始 到  32 结束
+
+// document.write(`<p>${binaryIpShow}</p>`);
+return binaryIpShow
+}
+
+function getHostBit(ipStr,hostBitCnt){
+   return  ipStr.substring(ipStr.length - hostBitCnt)
+}
+
+// 主机位
+
+		// 定义IP地址和子网掩码
+		var ip = "152.178.132.95";
+		var mask = 27;
+
+		// 将IP地址转换为二进制字符串
+        let  binarySegments=[]
+		var binaryIp = "";
+		ip.split(".").forEach(function(segment) {
+			var binarySegment = parseInt(segment).toString(2);
+			while (binarySegment.length < 8) {
+				binarySegment = "0" + binarySegment;
+			}
+            binarySegments.push(binarySegment)
+			binaryIp += binarySegment;
+		});
+
+        // String.join()k
+        // js ".".join
+        // let  binaryIpShow=".".join(binarySegments)
+        let  binaryIpShow=binarySegments.join(".")
+        // binaryIp. 
+		// 计算子网掩码的二进制字符串
+		var binaryMask = "";
+        // let  binaryMaskShow=""
+		// for (var i = 0; i < 32; i++) {
+		// 	if (i < mask) {
+		// 		binaryMask += "1";
+        //         binaryMaskShow += "1";
+		// 	} else {
+		// 		binaryMask += "0";
+        //         binaryMaskShow += "0";
+		// 	}
+        //     if(i%8==7){
+        //         binaryMaskShow+="."
+        //     }
+		// }
+
+        for (var i = 0; i < 32; i++) {
+			if (i < mask) {
+				binaryMask += "1";
+                // binaryMaskShow += "1";
+			} else {
+				binaryMask += "0";
+                // binaryMaskShow += "0";
+			}
+            // if(i%8==7){
+            //     binaryMaskShow+="."
+            // }
+		}
+
+      
+        function strAddIpPoint(binaryMask){
+            let  binaryMaskShow=""
+            let cnt=0
+            let ipLen=32
+            for (var i = 0; i < 32; i++) {
+                binaryMaskShow+=binaryMask[i]
+			// if (i < mask) {
+			// 	binaryMask += "1";
+            //     binaryMaskShow += "1";
+			// } else {
+			// 	binaryMask += "0";
+            //     binaryMaskShow += "0";
+			// }
+            if(cnt>=ipLen/8-1){
+                continue
+            }
+            if(i%8==7){
+                cnt++
+                binaryMaskShow+="."
+            }
+		}
+
+        return binaryMaskShow
+        }
+
+        let  binaryMaskShow=     strAddIpPoint(binaryMask)
+     
+
+		// 计算网络地址的二进制字符串
+		var binaryNetwork = binaryIp.substr(0, mask) + binaryMask.substr(mask);
+		
+		// 将二进制字符串转换为十进制数值
+		var network = parseInt(binaryNetwork.substr(0, 8), 2) + "." +
+					  parseInt(binaryNetwork.substr(8, 8), 2) + "." +
+					  parseInt(binaryNetwork.substr(16, 8), 2) + "." +
+					  parseInt(binaryNetwork.substr(24, 8), 2);
+                    //   binaryNetwork 给这个字符串，每8位加一个点，用js代码，最后一个点不要加
+                    
+                    console.log("binaryNetwork.length origin");
+                    console.log(binaryNetwork.length);
+		// 计算主机位ip的值
+		var hostIp = parseInt(binaryIp.substr(mask), 2);
+
+		// 计算主机位ip的取值范围
+		var hostMin = network.split(".").slice(0, 3).join(".") + "." + (parseInt(binaryNetwork.substr(24, 8), 2) + 1);
+		var hostMax = network.split(".").slice(0, 3).join(".") + "." + (parseInt(binaryNetwork.substr(24, 8), 2) + 31);
+
+        let lastMask=32-mask
+        let hostCnt=32-mask
+        // 主机位的 个数 
+
+       let  hostBit=  getHostBit(binaryMask,hostCnt)
+ 
+        document.write(   `确定在第四段，n为32-${mask}=${32-mask}`);
+       
+        document.write(   ` 主机位ip有2^${32-mask}=${Math.pow(2,32-mask)}种取值  确定在第四段，n为32-${mask}=${32-mask}`);
+       let   networkPoint=networkPointGet(binaryNetwork)
+		// 在页面上显示计算结果
+		document.write("<p>IP地址的二进制形式：" + binaryIpShow + "</p>");
+		document.write("<p>子网掩码的二进制形式：" + binaryMaskShow + "</p>");
+		document.write("<p>网络地址：" + network + "</p>");
+        document.write("<p>网络地址 binaryNetwork：" + networkPoint + "</p>");
+		document.write("<p>主机位ip的值：" + hostIp + "</p>");
+		document.write("<p>主机位ip的取值范围：" + hostMin + " - " + hostMax + "</p>");
+        document.write(`<p>下面是ip 子网掩码 的 and 计算，最终获得 网络地址</p>`);
+        document.write(`<p>hostCnt 主机位的 个数   ${hostCnt} ,</p>`);
+            document.write(`<p>也就是最后的红色的，如果你看到他们都是红色的1111，意味着他是广播地址</p>`);
+        // document.write(`<p>${binaryIpShow}</p>`);
+        // document.write(`<p>${colorLastBinaryIp}</p>`);
+        // // 让这个字符串，在html让，最后的n位染红，代码怎么写，binaryIpShow  document.write(`<p>${binaryIpShow}</p>`);
+        // document.write(`<p>${binaryMaskShow}</p>`);
+        // document.write(`<p>${networkPoint}</p>`);
+
+
+        let    colorLastBinaryIp= colorLast(binaryIpShow,hostCnt)
+      let    colorLastbinaryMaskShow= colorLast(binaryMaskShow,hostCnt)
+      let    colorLastNetworkPoint= colorLast(networkPoint,hostCnt)
+        document.write(`<p>${colorLastBinaryIp}</p>`);
+        // 让这个字符串，在html让，最后的n位染红，代码怎么写，binaryIpShow  document.write(`<p>${binaryIpShow}</p>`);
+        document.write(`<p>${colorLastbinaryMaskShow}</p>`);
+        document.write(`<p>${colorLastNetworkPoint}</p>`);
+	</script>
+</body>
+</html>
