@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- 这个不写 media没用  -->
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="320" name="MobileOptimized">
+
+    <!-- D:\proj\js\animals-web\mikutap-web\js\jquery.min.js -->
+    <!-- <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script> -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <style>
+        .needModResColor {
+            color: red;
+        }
+
+        .bodyDom {
+            /* width: 300px; */
+            /* font-size: 30px; */
+            /* font-size:5rem; */
+            /* font-size:1rem; */
+            /* font-size:2rem; */
+            /* font-size: 30px; */
+            /* font-size: 50px; */
+            /* overflow-x:hidden; */
+            /* overflow: auto; */
+        }
+
+        @media only screen and (max-width: 480px) {
+
+            /* //此适配不同手机型号下文字，图片的大小 */
+            .bodyDom {
+                /* width: 300px; */
+                font-size: 30px;
+            }
+        }
+
+        /* 小屏幕手机端 */
+        @media (min-width: 0px) and (max-width:768px) {
+
+            /* .div1{
+					width: 100px;
+					height: 100px;
+					background-color: red;
+				} */
+            .bodyDom {
+                /* width: 300px; */
+                /* font-size: 30px; */
+                font-size: 25px;
+                /* font-size: 50px; */
+
+            }
+
+            input {
+                font-size: 30px;
+            }
+
+            button {
+                font-size: 30px;
+            }
+        }
+
+        /* ————————————————
+版权声明：本文为CSDN博主「大前端工程师」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/chengqige/article/details/117844872 */
+    </style>
+</head>
+<!-- js实现ip地址和子网掩码功能计算，并判断指定ip地址是否在网段之间_js 子网掩码计算_笑到世界都狼狈的博客-CSDN博客
+https://blog.csdn.net/qq_36509946/article/details/105950926 -->
+
+<body>
+    <div class="bodyDom">
+
+
+
+<div>
+    长度 10  因子  0.7  
+    如果是 7  7/0.7 ==10  就是长度
+</div>
+
+
+        <input id="modTop" type="text" value="9" /> mod
+        <input id="modBottom" type="text" value="7" />
+
+        need mod <input id="needMod" type="text" value="1" />
+
+        <div><button id="btnCalMod">计算mod</button></div>
+        <div>
+            modRes <span id="modRes"></span>
+        </div>
+        <div>
+            chuyiRes <span id="chuyiRes"></span>
+
+        </div>
+        设散列表的长度为  <input id="hashTableLen" type="text" value="8" />
+        <div>
+            chuyiRes 整除 <span id="chuyiResRound"></span>
+        </div>
+        <input id="inputList" type="text" value="7,34,55,25,64,46,20,10" />
+        <!-- 7,34,55,25,64,46,20,10 -->
+        <!-- button onclick html -->
+        <!-- <div><button id="btnCalModAllList" onclick="CalModList">计算mod AllList</button></div> -->
+        <!-- 括号 才会调用  -->
+        <div><button id="btnCalModAllList" onclick="CalModList()">计算mod AllList</button></div>
+
+        <!-- <div><button id="btnCalModAllList" click="CalModList">计算mod AllList</button></div> -->
+
+        <div id="resText"></div>
+        <div id="resHere">
+            <div class="resOne">
+                mod值 1，
+                整除 2 ，
+                除以的值 4242，
+                原来的数 4141，
+                9 % 7 == 2
+                9 / 7 == 2 ==
+            </div>
+        </div>
+
+        <hr>
+        </hr>
+        needModResCnt <span id="needModResCnt"> </span>
+        平均查找长度 <span id="AverageLookupLength"> </span>
+        
+        <div>
+            hash <span id="hash"> </span>
+        </div>
+       
+
+        <!-- Average lookup length -->
+        <!-- AverageLookupLength -->
+        <div>
+            <button id="btnToIndex">index</button>
+            <a href="index.html">index.html</a>
+        </div>
+        <!-- 7,34,55,25,64,46,20,10 -->
+    </div>
+</body>
+<script type="text/javascript">
+    function getIPType(resultIp) {
+        let ipPart0 = resultIp[0]
+        ipPart0Int = parseInt(ipPart0)
+        if (ipPart0Int <= 126) {
+            // 1.0.0.1－126.255.255.254；
+            return "A"
+        }
+        if (ipPart0Int <= 191) {
+            return "B"
+        }
+        return "C"
+
+    }
+
+
+    function CalModVals(modTopVal, modBottomVal) {
+      
+        return {
+            modRes: modTopVal % modBottomVal,
+            chuyiRes: modTopVal / modBottomVal,
+            chuyiResRound: Math.round(
+                modTopVal / modBottomVal
+            )
+        }
+
+    }
+
+    function getCalModValsHtml(modTopVal, modBottomVal) {
+        let needMod = document.getElementById('needMod').value
+        
+        let hashTableLen = document.getElementById('hashTableLen').value
+
+        let modRes = modTopVal % modBottomVal
+        let modResHtml = `
+        <span>  ${modRes}</span>
+        `
+        if (needMod == modRes) {
+            modResHtml = `
+        <span  class="needModResColor" > ${modRes}</span>
+        `
+        }
+        return `
+        <hr></hr>
+        <div class="resOne">
+                ${modTopVal} % ${modBottomVal}== ${modResHtml}
+                <br>
+
+                ${modTopVal} /${modBottomVal}== ${ Math.round(
+                modTopVal / modBottomVal
+            )}  ==  ${modTopVal / modBottomVal}
+            </div>`
+
+    }
+
+    function CalModList() {
+        console.log('CalModList');
+        let needMod = document.getElementById('needMod').value
+        let inputListVals = document.getElementById('inputList').value
+        let hashTableLen = document.getElementById('hashTableLen').value
+        inputListVals=  inputListVals.replaceAll('，',',')
+        inputListVals = inputListVals.split(',')
+        let len=  hashTableLen
+        let modBottomVal = document.getElementById('modBottom').value
+        let resText = ""
+        let resHtml = ""
+        let  hash=[]
+        for(let i=0;i<len;i++){
+            hash.push([])
+        }
+        let needModResCnt = 0
+        for (let i = 0; i < inputListVals.length; i++) {
+            let inputListVal = inputListVals[i]
+            console.log("inputListVal");
+            console.log(inputListVal);
+
+            resText += JSON.stringify(
+                CalModVals(inputListVal, modBottomVal)
+            )
+            let modRes=inputListVal % modBottomVal
+            hash[modRes]?.push({
+                modRes,
+                inputListVal,
+                modBottomVal
+            })
+            if ((inputListVal % modBottomVal) == needMod) {
+                needModResCnt++
+            }
+            resHtml += getCalModValsHtml(inputListVal, modBottomVal)
+      
+        }
+        document.getElementById('resHere').innerHTML = resHtml
+        document.getElementById('needModResCnt').innerHTML = needModResCnt
+
+        console.log("hash");
+        console.log(hash);
+        document.getElementById('hash').textContent = JSON.stringify(hash)
+        let res=0
+        for(let link of hash){
+            for(let i=0;i<link.length;i++){
+                res+=i+1;
+            }
+        }
+        console.log("res");
+        console.log(res);
+        document.getElementById('AverageLookupLength').textContent = res /inputListVals.length
+
+    }
+
+    function CalMod() {
+        let modTopVal = document.getElementById('modTop').value
+        let modBottomVal = document.getElementById('modBottom').value
+        // document.getElementById('modRes').innerText =
+        document.getElementById('modRes').innerText =
+            document.getElementById('modTop').value % document.getElementById('modBottom').value
+
+        document.getElementById('chuyiRes').innerText = modTopVal / modBottomVal
+        document.getElementById('chuyiResRound').innerText =
+            Math.round(
+                modTopVal / modBottomVal
+            )
+    }
+    document.getElementById('btnToIndex').onclick = () => {
+        window.location.href = "index.html"
+    }
+    document.getElementById('btnCalMod').onclick = () => {
+        CalMod()
+    }
+
+    $("#btnClick").on("click", function () {
+        var resultIp = $("#ip").val().split("."); //IP地址
+        var resultMask = $("#netMask").val().split("."); //子网掩码
+        var resultAddValue = $("#addValue").val().split("."); //输入IP地址范围
+        //			console.log('resultIp',resultIp);
+        //			console.log('resultMask',resultMask);
+        //			console.log('resultAddValue',resultAddValue);
+
+        // classIP
+        let classIPDom =
+            document.getElementById("classIP")
+
+        let ipType = getIPType(resultIp)
+
+        classIPDom.innerHTML = `${ipType} 类网络`
+
+        //    let ipPart0=  resultIp[0]
+        //    ipPart0Int=parseInt(ipPart0)
+        //    if(ipPart0Int<=126){
+        //     // 1.0.0.1－126.255.255.254；
+        //    }
+        //    classIPDom.innerHTML = resultIp[0];
+        //将输入IP范围转换成整数
+        var resultAddValueNumber = Number(resultAddValue[0]) * 256 * 256 * 256 + Number(resultAddValue[1]) *
+            256 * 256 + Number(resultAddValue[2]) * 256 + Number(resultAddValue[3]);
+        //	    	console.log('resultAddValueNumber',resultAddValueNumber);
+        var subNet = []; //ip地址与子网掩码相与的网段结果
+        for (var i = 0, num = resultIp.length; i < num; i++) {
+            var c = parseInt(resultIp[i]) & parseInt(resultMask[i]);
+            subNet.push(c);
+        }
+        subNet = subNet.join(".");
+        // console.log(subNet);
+        var subNetResult = subNet.split(".");
+        document.getElementById("subNetResult").innerHTML = subNetResult;
+        //	        console.log('subNetResult',subNetResult);
+        //限制输入范围在相与结果网段，最低位为1-255,将其转换成整数
+        var ipLeftNumber = Number(subNetResult[0]) * 256 * 256 * 256 + Number(subNetResult[1]) * 256 * 256 +
+            Number(subNetResult[2]) * 256 + Number(1);
+        var ipRightNumber = Number(subNetResult[0]) * 256 * 256 * 256 + Number(subNetResult[1]) * 256 * 256 +
+            Number(subNetResult[2]) * 256 + Number(255);
+        //	        console.log('ipLeftNumber',ipLeftNumber);
+        //	        console.log('ipRightNumber',ipRightNumber);
+        if ($("#addValue").val() != "") {
+            //如果输入IP，判断在不在范围内
+            if (resultAddValueNumber < ipLeftNumber || resultAddValueNumber > ipRightNumber) {
+                console.log('超出IP网段范围');
+            } else {
+                console.log('成功');
+            }
+        }
+    })
+
+    
+    let  codePart=`// 定义一个常量N表示待排序个数 const N = 10; // 定义一个数组R存放待排序的元素 let R = [10,18,4,3,6,12,1,9,18,8]; // 定义一个函数来划分数组 function partition(array, left, right) { // 选择最后一个元素作为基准 let pivot = array[right]; // 定义一个指针i指向左边界前面 let i = left - 1; // 遍历数组中除了最后一个元素以外的所有元素 for (let j = left; j < right; j++) { // 如果当前遍历到的元素小于等于基准 if (array[j] <= pivot) { // 将i向右移动一位 i++; // 将array[i]和array[j]交换位置 [array[i], array[j]] = [array[j], array[i]]; } } // 将array[i + 1]和array[right]交换位置，即将基准放在正确的位置上 [array[i + 1], array[right]] = [array[right], array[i + 1]]; // 返回基准所在下标 return i + 1; }
+
+// 定义一个函数来实现快速排序算法 function quickSort(array, left, right) { // 如果左边界小于右边界，说明还有至少两个以上的元素需要排序 if (left < right) { // 调用partition函数对数组进行划分，并得到基准所在下标 let pivotIndex = partition(array, left, right); // 对左半部分递归地进行快速排序 quickSort(array, left, pivotIndex - 1); // 对右半部分递归地进行快速排序 quickSort(array, pivotIndex + 1, right); } }
+
+// 调用一次partition函数得到第一趟结果，并打印出来 let pivotIndex = partition(R ,0 ,N-1); console.log®;`
+
+let  writeCode=
+// codePart.replace("//","\\\n//")
+codePart.replace("//","\n//")
+
+console.log("writeCode");
+console.log(writeCode);
+
+</script>
+
+</html>

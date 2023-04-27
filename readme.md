@@ -9,6 +9,11 @@ animals.html 为入口
 D:\proj\js\animals-web\quickSort.html
 quickSort js
 
+git remote add origin https://github.com/starplatinum3/animals-web.git
+
+git remote add github https://github.com/starplatinum3/animals-web.git
+
+
 git add .
 git commit -m "1" 
 git push origin master
